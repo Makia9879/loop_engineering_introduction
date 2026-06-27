@@ -777,13 +777,13 @@
             <article class="cycle-card">
               <span>04</span>
               <h3>验证与沉淀</h3>
-              <p>用测试、E2E、截图、日志和知识库更新关闭循环。</p>
+              <p>用测试、E2E、截图、日志和仓库内 md 业务记忆更新关闭循环。</p>
             </article>
           </div>
           <div class="evidence-strip">
             <div class="evidence">需求表<br>系统边界与验收条件</div>
             <div class="evidence">执行日志<br>代码、部署、测试证据</div>
-            <div class="evidence">知识库<br>项目经验持续复用</div>
+            <div class="evidence">业务记忆<br>项目经验持续复用</div>
           </div>
         </aside>
       </section>
@@ -814,7 +814,7 @@
               <h2>怎么利用 Codex /goal 实现 Loop Engineering</h2>
             </div>
             <p>
-              <code>/goal</code> 的价值是把一次对话升级为一个持续追踪的工程目标。目标没有真正完成前，Codex 会围绕它持续推进、验证并汇报状态。
+              <code>/goal</code> 的价值是把一次对话升级为一个持续追踪的工程目标。目标完成前，Codex 会围绕它持续推进、验证并汇报状态。
             </p>
           </div>
 
@@ -824,14 +824,14 @@
                 <div class="step-icon">G</div>
                 <div>
                   <h3>用 /goal 建立目标容器</h3>
-                  <p>把业务目标、交付物、验收条件写进目标描述，避免每轮对话重新解释背景。</p>
+                  <p>把业务目标、交付物、验收条件写进目标描述，让每轮对话都继承清晰背景。</p>
                 </div>
               </article>
               <article class="step">
                 <div class="step-icon">C</div>
                 <div>
                   <h3>让 Codex 先补齐上下文</h3>
-                  <p>要求它读取源码、文档、配置和运行日志，再输出判断。没有证据时应明确标注假设。</p>
+                  <p>要求它读取源码、文档、配置和运行日志，再输出判断，并明确标注证据状态和必要假设。</p>
                 </div>
               </article>
               <article class="step">
@@ -857,7 +857,7 @@
 3. 修改代码并补充必要测试；
 4. 通过 SSH 部署到 CA 测试服务器；
 5. 用浏览器 E2E 验证关键流程；
-6. 把经验、风险和后续注意事项写回项目知识库。</code>
+6. 把经验、风险和后续注意事项写回仓库内 md 业务记忆。</code>
             </div>
           </div>
 
@@ -876,7 +876,7 @@
             </div>
             <div class="metric">
               <strong>经验沉淀</strong>
-              <span>知识库持续更新</span>
+              <span>业务记忆持续更新</span>
             </div>
           </div>
         </div>
@@ -925,24 +925,24 @@
                 <li><span class="check">✓</span><span>设计说明：影响范围、数据流、模块改动、兼容策略、回滚方式。</span></li>
                 <li><span class="check">✓</span><span>实现变更：代码 diff、测试补充、配置调整和部署脚本记录。</span></li>
                 <li><span class="check">✓</span><span>验证证据：浏览器 E2E 路径、截图、网络请求、控制台日志、服务端日志。</span></li>
-                <li><span class="check">✓</span><span>知识沉淀：问题原因、修复路径、项目约定和下一次可复用的提示词。</span></li>
+                <li><span class="check">✓</span><span>业务记忆：通过仓库内 md 文档记录问题原因、修复路径、项目约定和下一次可复用的提示词。</span></li>
               </ul>
             </article>
 
             <article class="wide-card">
               <h3>一条需求的推荐闭环</h3>
               <ul class="component-list">
-                <li><span class="check">✓</span><span>从新 UI 源码出发，不只看原型，避免需求理解和实际实现脱节。</span></li>
+                <li><span class="check">✓</span><span>从新 UI 源码出发，同时对照原型，让需求理解和实际实现保持一致。</span></li>
                 <li><span class="check">✓</span><span>先形成需求摘要和设计摘要，再进入编码，便于人工快速校正方向。</span></li>
                 <li><span class="check">✓</span><span>部署动作通过 SSH 留痕，重点记录命令、环境、版本和日志异常。</span></li>
                 <li><span class="check">✓</span><span>E2E 验证以真实浏览器路径为准，覆盖主流程、失败态和权限态。</span></li>
-                <li><span class="check">✓</span><span>收尾时更新 CA QA 机器人知识库，让项目经验进入下一轮上下文。</span></li>
+                <li><span class="check">✓</span><span>收尾时更新仓库内 md 业务记忆，让项目经验进入下一轮上下文。</span></li>
               </ul>
             </article>
           </div>
 
           <p class="callout" style="margin-top: 20px;">
-            关键原则：AI 不应只交付“代码已经改完”的结论，而要交付“需求如何得出、设计为何这样、部署是否成功、用户路径是否可用”的完整证据链。
+            关键原则：AI 要交付“需求如何得出、设计为何这样、部署是否成功、用户路径是否可用”的完整证据链。
           </p>
         </div>
       </section>
@@ -974,8 +974,8 @@
             </article>
             <article class="roadmap-item">
               <div>
-                <h3>自动维护 CA QA 机器人知识库</h3>
-                <p>每次修复完成后，把问题现象、根因、修复方式、验证路径、环境差异和项目约定写入知识库，减少经验断档。</p>
+                <h3>建设 CA QA 机器人</h3>
+                <p>在仓库内 md 业务记忆稳定沉淀后，把问题现象、根因、修复方式、验证路径、环境差异和项目约定接入 QA 机器人知识库。</p>
               </div>
             </article>
             <article class="roadmap-item">
@@ -989,7 +989,7 @@
           <div class="grid-3" style="margin-top: 18px;">
             <article class="card">
               <h3>平台输入</h3>
-              <p>ONES 卡片、代码仓库、部署环境、测试账号、日志入口、QA 知识库。</p>
+              <p>ONES 卡片、代码仓库、部署环境、测试账号、日志入口、仓库内 md 业务记忆。</p>
             </article>
             <article class="card">
               <h3>平台处理</h3>
@@ -997,7 +997,7 @@
             </article>
             <article class="card">
               <h3>平台输出</h3>
-              <p>修复结果、验证证据、变更说明、知识库更新、下一步待办。</p>
+              <p>修复结果、验证证据、变更说明、业务记忆更新、下一步待办。</p>
             </article>
           </div>
         </div>
