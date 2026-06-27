@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/loop-engineering-practice.html"
+    }
+  ]
+}

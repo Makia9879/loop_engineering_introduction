@@ -1,0 +1,1017 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loop Engineering 实践介绍</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17202a;
+      --muted: #5e6978;
+      --line: #d9dee8;
+      --paper: #f7f8fb;
+      --panel: #ffffff;
+      --accent: #176b87;
+      --accent-2: #b56b22;
+      --accent-3: #53652d;
+      --accent-4: #7b4e9b;
+      --deep: #0f2f3d;
+      --shadow: 0 16px 48px rgba(23, 32, 42, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.86), rgba(247,248,251,0.94)),
+        repeating-linear-gradient(90deg, rgba(23,107,135,0.06) 0, rgba(23,107,135,0.06) 1px, transparent 1px, transparent 96px),
+        repeating-linear-gradient(0deg, rgba(181,107,34,0.06) 0, rgba(181,107,34,0.06) 1px, transparent 1px, transparent 96px);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      min-height: 100vh;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(247, 248, 251, 0.86);
+      border-bottom: 1px solid rgba(217, 222, 232, 0.86);
+    }
+
+    .nav-inner {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+      color: var(--deep);
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: conic-gradient(from 30deg, var(--accent), var(--accent-2), var(--accent-3), var(--accent));
+      box-shadow: 0 8px 20px rgba(23, 107, 135, 0.28);
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      padding: 8px 10px;
+      border-radius: 6px;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .hero {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      min-height: calc(100vh - 64px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+      gap: 42px;
+      align-items: center;
+      padding: 56px 0 72px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 36px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.15;
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      font-size: clamp(42px, 7vw, 82px);
+      max-width: 820px;
+      color: var(--deep);
+    }
+
+    .lead {
+      margin: 24px 0 0;
+      max-width: 720px;
+      color: #344252;
+      font-size: clamp(18px, 2.2vw, 24px);
+      line-height: 1.55;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .button {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(23, 32, 42, 0.07);
+    }
+
+    .button.primary {
+      background: var(--deep);
+      color: #fff;
+      border-color: var(--deep);
+    }
+
+    .loop-visual {
+      position: relative;
+      min-height: 530px;
+      background: var(--panel);
+      border: 1px solid rgba(217, 222, 232, 0.92);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      padding: 30px;
+    }
+
+    .loop-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 80% 16%, rgba(181,107,34,0.14), transparent 28%),
+        radial-gradient(circle at 12% 82%, rgba(23,107,135,0.16), transparent 32%);
+      pointer-events: none;
+    }
+
+    .visual-title {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--deep);
+      margin-bottom: 26px;
+    }
+
+    .visual-title strong {
+      font-size: 18px;
+    }
+
+    .status-pill {
+      border: 1px solid rgba(23, 107, 135, 0.28);
+      background: rgba(23, 107, 135, 0.08);
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .cycle {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .cycle::after {
+      content: "↻";
+      position: absolute;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%);
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 44px;
+      color: #fff;
+      background: var(--deep);
+      box-shadow: 0 18px 36px rgba(15, 47, 61, 0.24);
+    }
+
+    .cycle-card {
+      position: relative;
+      min-height: 122px;
+      border: 1px solid rgba(217, 222, 232, 0.9);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.86);
+      padding: 18px;
+    }
+
+    .cycle-card:nth-child(1) { border-top: 4px solid var(--accent); }
+    .cycle-card:nth-child(2) { border-top: 4px solid var(--accent-2); }
+    .cycle-card:nth-child(3) { border-top: 4px solid var(--accent-3); }
+    .cycle-card:nth-child(4) { border-top: 4px solid var(--accent-4); }
+
+    .cycle-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    .cycle-card h3 {
+      font-size: 20px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .cycle-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .evidence-strip {
+      position: relative;
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .evidence {
+      border-radius: 6px;
+      padding: 12px;
+      background: rgba(15, 47, 61, 0.06);
+      color: #344252;
+      font-size: 13px;
+      font-weight: 700;
+      min-height: 62px;
+    }
+
+    .section {
+      padding: 92px 0;
+      border-top: 1px solid rgba(217, 222, 232, 0.72);
+      scroll-margin-top: 84px;
+    }
+
+    .section:nth-of-type(even) {
+      background: rgba(255, 255, 255, 0.54);
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(280px, 0.55fr);
+      gap: 44px;
+      align-items: end;
+      margin-bottom: 34px;
+    }
+
+    .section-kicker {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: clamp(30px, 4vw, 52px);
+      color: var(--deep);
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card,
+    .wide-card {
+      background: var(--panel);
+      border: 1px solid rgba(217, 222, 232, 0.9);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 12px 30px rgba(23, 32, 42, 0.06);
+    }
+
+    .card h3,
+    .wide-card h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: var(--ink);
+    }
+
+    .card p,
+    .wide-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .number {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--accent);
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+
+    .component-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    .component-list li {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      color: #344252;
+    }
+
+    .chapter-visual {
+      background: var(--panel);
+      border: 1px solid rgba(217, 222, 232, 0.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .chapter-visual img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #fff;
+    }
+
+    .check {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(83, 101, 45, 0.12);
+      color: var(--accent-3);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .prompt-box {
+      background: #101820;
+      color: #e6edf4;
+      border-radius: var(--radius);
+      padding: 24px;
+      overflow: auto;
+      box-shadow: var(--shadow);
+    }
+
+    .prompt-box code {
+      white-space: pre-wrap;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .steps {
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+      background: var(--panel);
+      border: 1px solid rgba(217, 222, 232, 0.9);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+
+    .step-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: rgba(23, 107, 135, 0.1);
+      color: var(--accent);
+      font-weight: 900;
+      font-size: 20px;
+    }
+
+    .step h3 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin: 28px 0;
+    }
+
+    .flow-node {
+      position: relative;
+      min-height: 144px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(217, 222, 232, 0.9);
+      background: var(--panel);
+      padding: 18px;
+      box-shadow: 0 10px 24px rgba(23, 32, 42, 0.06);
+    }
+
+    .flow-node:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -12px;
+      top: 50%;
+      transform: translate(50%, -50%);
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--deep);
+      border-radius: 50%;
+      z-index: 2;
+      font-size: 14px;
+    }
+
+    .flow-node strong {
+      display: block;
+      color: var(--deep);
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .flow-node span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .callout {
+      border-left: 5px solid var(--accent-2);
+      background: rgba(181, 107, 34, 0.08);
+      padding: 20px 24px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      color: #4c3822;
+      font-weight: 700;
+    }
+
+    .roadmap {
+      display: grid;
+      gap: 16px;
+      counter-reset: roadmap;
+    }
+
+    .roadmap-item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: 22px;
+      background: var(--panel);
+      border: 1px solid rgba(217, 222, 232, 0.9);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 12px 30px rgba(23, 32, 42, 0.06);
+    }
+
+    .roadmap-item::before {
+      counter-increment: roadmap;
+      content: "0" counter(roadmap);
+      color: var(--accent);
+      font-weight: 900;
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .roadmap-item h3 {
+      font-size: 21px;
+      margin-bottom: 8px;
+    }
+
+    .roadmap-item p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .metric {
+      background: #fff;
+      border: 1px solid rgba(217, 222, 232, 0.9);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--deep);
+      font-size: 23px;
+      margin-bottom: 6px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .footer {
+      padding: 44px 0 60px;
+      background: var(--deep);
+      color: #dce6eb;
+    }
+
+    .footer .container {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer strong {
+      color: #fff;
+    }
+
+    .footer p {
+      max-width: 680px;
+      margin: 0;
+      color: #c1d0d7;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .section-head,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .loop-visual {
+        min-height: auto;
+      }
+
+      .grid-3,
+      .flow,
+      .metric-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .flow-node:not(:last-child)::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav-inner {
+        width: min(100% - 28px, 1180px);
+        align-items: flex-start;
+        padding: 12px 0;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .hero,
+      .container {
+        width: min(100% - 28px, 1180px);
+      }
+
+      .hero {
+        padding-top: 38px;
+      }
+
+      .cycle,
+      .grid-3,
+      .flow,
+      .metric-row,
+      .evidence-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .cycle::after {
+        position: static;
+        transform: none;
+        margin: 4px auto;
+        order: 5;
+      }
+
+      .roadmap-item {
+        grid-template-columns: 1fr;
+      }
+
+      .chapter-visual {
+        overflow-x: auto;
+      }
+
+      .chapter-visual img {
+        min-width: 920px;
+      }
+
+      h1 {
+        font-size: 42px;
+      }
+
+      h2 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="nav">
+      <div class="nav-inner">
+        <a class="brand" href="#top" aria-label="返回顶部">
+          <span class="brand-mark">↻</span>
+          <span>Loop Engineering</span>
+        </a>
+        <nav class="nav-links" aria-label="章节导航">
+          <a href="#what">是什么</a>
+          <a href="#codex-goal">Codex /goal</a>
+          <a href="#ca-project">CA 项目实践</a>
+          <a href="#future">未来计划</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <div class="eyebrow">AI Native Delivery Method</div>
+          <h1 id="hero-title">Loop Engineering 实践介绍</h1>
+          <p class="lead">
+            Loop Engineering 是一种把 AI 编程从“一次性问答”升级为“目标驱动、证据闭环、持续沉淀”的工程实践。
+            它要求每一次需求开发都能形成清晰目标、可追踪执行、可验证结果和可复用经验。
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#what">开始阅读</a>
+            <a class="button" href="#ca-project">查看 CA 落地方式</a>
+          </div>
+        </div>
+
+        <aside class="loop-visual" aria-label="Loop Engineering 闭环图">
+          <div class="visual-title">
+            <strong>从目标到经验沉淀的闭环</strong>
+            <span class="status-pill">goal → verify → learn</span>
+          </div>
+          <div class="cycle">
+            <article class="cycle-card">
+              <span>01</span>
+              <h3>定义目标</h3>
+              <p>明确要交付的业务结果、边界、验收标准和风险。</p>
+            </article>
+            <article class="cycle-card">
+              <span>02</span>
+              <h3>构造上下文</h3>
+              <p>读取源码、原型、接口、日志、部署环境和历史经验。</p>
+            </article>
+            <article class="cycle-card">
+              <span>03</span>
+              <h3>实现与部署</h3>
+              <p>按计划修改、调试、远程部署，并留下执行证据。</p>
+            </article>
+            <article class="cycle-card">
+              <span>04</span>
+              <h3>验证与沉淀</h3>
+              <p>用测试、E2E、截图、日志和知识库更新关闭循环。</p>
+            </article>
+          </div>
+          <div class="evidence-strip">
+            <div class="evidence">需求表<br>系统边界与验收条件</div>
+            <div class="evidence">执行日志<br>代码、部署、测试证据</div>
+            <div class="evidence">知识库<br>项目经验持续复用</div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section" id="what">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Chapter 01</div>
+              <h2>Loop Engineering 是什么</h2>
+            </div>
+            <p>
+              它把需求开发拆成可反复运行的工程循环：目标、上下文、计划、执行、验证、沉淀。
+            </p>
+          </div>
+
+          <figure class="chapter-visual" aria-label="Loop Engineering 核心循环与组成组件图">
+            <img src="loop-engineering-2026.svg" alt="Loop Engineering 是什么：由目标、自动化、上下文与技能、工作树、子代理验证、交付与记忆组成的工程循环">
+          </figure>
+        </div>
+      </section>
+
+      <section class="section" id="codex-goal">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Chapter 02</div>
+              <h2>怎么利用 Codex /goal 实现 Loop Engineering</h2>
+            </div>
+            <p>
+              <code>/goal</code> 的价值是把一次对话升级为一个持续追踪的工程目标。目标没有真正完成前，Codex 会围绕它持续推进、验证并汇报状态。
+            </p>
+          </div>
+
+          <div class="grid-2">
+            <div class="steps">
+              <article class="step">
+                <div class="step-icon">G</div>
+                <div>
+                  <h3>用 /goal 建立目标容器</h3>
+                  <p>把业务目标、交付物、验收条件写进目标描述，避免每轮对话重新解释背景。</p>
+                </div>
+              </article>
+              <article class="step">
+                <div class="step-icon">C</div>
+                <div>
+                  <h3>让 Codex 先补齐上下文</h3>
+                  <p>要求它读取源码、文档、配置和运行日志，再输出判断。没有证据时应明确标注假设。</p>
+                </div>
+              </article>
+              <article class="step">
+                <div class="step-icon">D</div>
+                <div>
+                  <h3>执行设计、实现、部署</h3>
+                  <p>Codex 可以在本地修改文件、运行命令、远程 SSH 部署，过程以短状态更新保持可追踪。</p>
+                </div>
+              </article>
+              <article class="step">
+                <div class="step-icon">V</div>
+                <div>
+                  <h3>用证据完成目标</h3>
+                  <p>最终输出应包含改了什么、如何验证、哪些风险还存在，并在目标完成后关闭循环。</p>
+                </div>
+              </article>
+            </div>
+
+            <div class="prompt-box" aria-label="/goal 示例">
+              <code>/goal 基于新版 UI 源码完成某业务模块需求开发：
+1. 先从页面、接口、状态管理和路由中总结系统需求；
+2. 给出最小设计方案和影响范围；
+3. 修改代码并补充必要测试；
+4. 通过 SSH 部署到 CA 测试服务器；
+5. 用浏览器 E2E 验证关键流程；
+6. 把经验、风险和后续注意事项写回项目知识库。</code>
+            </div>
+          </div>
+
+          <div class="metric-row">
+            <div class="metric">
+              <strong>1 个目标</strong>
+              <span>聚焦一条业务闭环</span>
+            </div>
+            <div class="metric">
+              <strong>多轮执行</strong>
+              <span>上下文持续积累</span>
+            </div>
+            <div class="metric">
+              <strong>证据验收</strong>
+              <span>测试、日志、截图闭环</span>
+            </div>
+            <div class="metric">
+              <strong>经验沉淀</strong>
+              <span>知识库持续更新</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="ca-project">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Chapter 03</div>
+              <h2>CA 项目的当前实践路径</h2>
+            </div>
+            <p>
+              CA 项目已经可以把“理解新版本 UI 源码、总结系统需求、设计并实现、远程部署、浏览器 E2E 验证”串成一条需求开发流水线。
+            </p>
+          </div>
+
+          <div class="flow" aria-label="CA 项目 Loop Engineering 流程">
+            <div class="flow-node">
+              <strong>源码理解</strong>
+              <span>读取新版 UI 页面、组件、路由、状态、接口调用和权限逻辑。</span>
+            </div>
+            <div class="flow-node">
+              <strong>需求总结</strong>
+              <span>把源码行为整理为系统需求、边界、异常状态和验收条件。</span>
+            </div>
+            <div class="flow-node">
+              <strong>设计实现</strong>
+              <span>形成最小设计，完成代码修改、配置调整和必要测试。</span>
+            </div>
+            <div class="flow-node">
+              <strong>远程部署</strong>
+              <span>通过 SSH 进入服务器，执行构建、发布、重启和日志检查。</span>
+            </div>
+            <div class="flow-node">
+              <strong>浏览器 E2E</strong>
+              <span>打开真实环境页面，模拟用户路径，保存截图、日志和结论。</span>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <article class="wide-card">
+              <h3>当前可形成的交付物</h3>
+              <ul class="component-list">
+                <li><span class="check">✓</span><span>系统需求表：页面行为、接口依赖、权限规则、异常分支、验收标准。</span></li>
+                <li><span class="check">✓</span><span>设计说明：影响范围、数据流、模块改动、兼容策略、回滚方式。</span></li>
+                <li><span class="check">✓</span><span>实现变更：代码 diff、测试补充、配置调整和部署脚本记录。</span></li>
+                <li><span class="check">✓</span><span>验证证据：浏览器 E2E 路径、截图、网络请求、控制台日志、服务端日志。</span></li>
+                <li><span class="check">✓</span><span>知识沉淀：问题原因、修复路径、项目约定和下一次可复用的提示词。</span></li>
+              </ul>
+            </article>
+
+            <article class="wide-card">
+              <h3>一条需求的推荐闭环</h3>
+              <ul class="component-list">
+                <li><span class="check">✓</span><span>从新 UI 源码出发，不只看原型，避免需求理解和实际实现脱节。</span></li>
+                <li><span class="check">✓</span><span>先形成需求摘要和设计摘要，再进入编码，便于人工快速校正方向。</span></li>
+                <li><span class="check">✓</span><span>部署动作通过 SSH 留痕，重点记录命令、环境、版本和日志异常。</span></li>
+                <li><span class="check">✓</span><span>E2E 验证以真实浏览器路径为准，覆盖主流程、失败态和权限态。</span></li>
+                <li><span class="check">✓</span><span>收尾时更新 CA QA 机器人知识库，让项目经验进入下一轮上下文。</span></li>
+              </ul>
+            </article>
+          </div>
+
+          <p class="callout" style="margin-top: 20px;">
+            关键原则：AI 不应只交付“代码已经改完”的结论，而要交付“需求如何得出、设计为何这样、部署是否成功、用户路径是否可用”的完整证据链。
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="future">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Chapter 04</div>
+              <h2>未来计划：从需求开发到自动修复缺陷</h2>
+            </div>
+            <p>
+              下一步可以把 Loop Engineering 扩展成面向进度看板和缺陷卡片的自动化平台能力，让 AI 围绕真实项目流持续工作。
+            </p>
+          </div>
+
+          <div class="roadmap">
+            <article class="roadmap-item">
+              <div>
+                <h3>接入 ONES 进度看板</h3>
+                <p>以需求卡片、缺陷卡片、优先级、负责人、环境信息和验收标准作为目标输入，自动创建 AI 工作循环。</p>
+              </div>
+            </article>
+            <article class="roadmap-item">
+              <div>
+                <h3>从缺陷卡片自动修复</h3>
+                <p>AI 读取缺陷描述、复现步骤、截图、日志和关联版本，自动复现、定位、设计修复、提交补丁并执行验证。</p>
+              </div>
+            </article>
+            <article class="roadmap-item">
+              <div>
+                <h3>自动维护 CA QA 机器人知识库</h3>
+                <p>每次修复完成后，把问题现象、根因、修复方式、验证路径、环境差异和项目约定写入知识库，减少经验断档。</p>
+              </div>
+            </article>
+            <article class="roadmap-item">
+              <div>
+                <h3>建立人机协作控制点</h3>
+                <p>在生产发布、危险命令、权限变更、需求歧义和跨系统影响处设置人工确认，保证自动化可控。</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="grid-3" style="margin-top: 18px;">
+            <article class="card">
+              <h3>平台输入</h3>
+              <p>ONES 卡片、代码仓库、部署环境、测试账号、日志入口、QA 知识库。</p>
+            </article>
+            <article class="card">
+              <h3>平台处理</h3>
+              <p>目标拆解、上下文收集、自动修复、远程部署、E2E 验证、风险报告。</p>
+            </article>
+            <article class="card">
+              <h3>平台输出</h3>
+              <p>修复结果、验证证据、变更说明、知识库更新、下一步待办。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <strong>Loop Engineering = 目标驱动 + 证据闭环 + 经验沉淀</strong>
+        <p>
+          对 CA 项目而言，它的核心价值在于把需求分析、实现、部署、验证和知识维护串成可复用的 AI 工程循环。
+        </p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
