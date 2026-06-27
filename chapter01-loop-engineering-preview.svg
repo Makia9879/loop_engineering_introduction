@@ -1,148 +1,163 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="title desc">
-  <title id="title">Loop Engineering 第一章流程图预览</title>
-  <desc id="desc">白底流程图，展示 Loop Engineering 的六个核心步骤和六个组成组件。</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1340" viewBox="0 0 1600 1340" role="img" aria-labelledby="title desc">
+  <title id="title">Loop Engineering 5+1 框架与 CA 实践映射</title>
+  <desc id="desc">展示 Loop Engineering 的 recursive goal 循环，以及 Automations、Worktrees、Skills、Plugins and Connectors、Sub-agents、Memory State 六个组成部分和 CA 项目实践映射。</desc>
+
   <defs>
-    <marker id="arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="12" markerHeight="12" orient="auto-start-reverse">
-      <path d="M 1 1 L 11 6 L 1 11 z" fill="#176b87"/>
+    <marker id="arrow-blue" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="11" markerHeight="11" orient="auto">
+      <path d="M1,1 L11,6 L1,11 Z" fill="#176b87"/>
     </marker>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#17202a" flood-opacity="0.11"/>
+    <marker id="arrow-orange" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="10" markerHeight="10" orient="auto">
+      <path d="M1,1 L11,6 L1,11 Z" fill="#b56b22"/>
+    </marker>
+    <filter id="shadow" x="-18%" y="-24%" width="136%" height="148%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#17202a" flood-opacity="0.12"/>
     </filter>
     <style>
       .bg { fill: #ffffff; }
-      .title { font: 800 52px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #0f2f3d; }
-      .subtitle { font: 400 24px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #5e6978; }
-      .section { font: 800 26px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #0f2f3d; }
-      .step-box { fill: #ffffff; stroke: #d9dee8; stroke-width: 2; filter: url(#shadow); }
-      .step-no { font: 800 22px Inter, Arial, sans-serif; fill: #ffffff; }
-      .step-title { font: 800 28px Inter, "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #0f2f3d; }
-      .step-copy { font: 400 18px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #344252; }
-      .component { fill: #f7f8fb; stroke: #d9dee8; stroke-width: 2; }
-      .component-title { font: 800 20px Inter, "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #17202a; }
-      .component-copy { font: 400 16px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #5e6978; }
-      .loop-line { fill: none; stroke: #176b87; stroke-width: 4; stroke-linecap: round; marker-end: url(#arrow); }
-      .small-line { fill: none; stroke: #b56b22; stroke-width: 3; stroke-linecap: round; marker-end: url(#arrow); opacity: 0.9; }
+      .title { font: 800 48px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #0f2f3d; }
+      .subtitle { font: 400 22px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #536171; }
+      .section { font: 800 28px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #102f42; }
+      .hint { font: 600 17px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #637284; }
+      .loop-line { fill: none; stroke: #176b87; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrow-blue); }
+      .evidence-line { fill: none; stroke: #b56b22; stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 9 9; marker-end: url(#arrow-orange); }
+      .card { fill: #ffffff; stroke: #d9e2ea; stroke-width: 2; filter: url(#shadow); }
+      .component { fill: #f8fbfd; stroke: #d9e4ed; stroke-width: 2; }
+      .memory { fill: #eef8f4; stroke: #b8dfce; stroke-width: 2; }
+      .gate { fill: #fff8ef; stroke: #edd0aa; stroke-width: 2; }
+      .map { fill: #ffffff; stroke: #d9e4ed; stroke-width: 2; }
+      .badge-blue { fill: #176b87; }
+      .badge-green { fill: #53652d; }
+      .badge-orange { fill: #b56b22; }
+      .badge-text { font: 800 18px Inter, Arial, sans-serif; fill: #ffffff; }
+      .label { font: 800 21px Inter, "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #172637; }
+      .core-label { font: 800 27px Inter, "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #0f2f3d; }
+      .copy { font: 400 16px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #526273; }
+      .small { font: 700 14px "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #637284; }
+      .map-label { font: 800 20px Inter, "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #172637; }
     </style>
   </defs>
 
-  <rect class="bg" width="1600" height="1000"/>
-  <text class="title" x="100" y="105">Loop Engineering 是什么</text>
-  <text class="subtitle" x="100" y="150">把需求开发拆成可反复运行的工程循环：目标、上下文、计划、执行、验证、沉淀。</text>
+  <rect class="bg" width="1600" height="1340"/>
 
-  <text class="section" x="100" y="230">核心步骤</text>
+  <g transform="translate(90 62)">
+    <text class="title" x="0" y="0">Loop Engineering：设计会提示 Agent 的循环系统</text>
+    <text class="subtitle" x="0" y="46">
+      <tspan x="0" dy="0">核心是用 recursive goal 让系统发现、分派、执行、验证并记录下一步。</tspan>
+      <tspan x="0" dy="34">本图用 CA 项目实践视角映射 Addy Osmani 的 5+1 框架。</tspan>
+    </text>
+  </g>
 
-  <g transform="translate(100 270)">
-    <path class="loop-line" d="M 250 80 H 325"/>
-    <path class="loop-line" d="M 575 80 H 650"/>
-    <path class="loop-line" d="M 900 80 H 975"/>
-    <path class="loop-line" d="M 1095 185 V 230 H 780"/>
-    <path class="loop-line" d="M 530 230 H 455"/>
-    <path class="loop-line" d="M 205 230 H 120 V 165"/>
+  <g transform="translate(90 210)">
+    <text class="section" x="0" y="0">循环骨架：目标驱动的工程闭环</text>
+    <text class="hint" x="0" y="42">每轮必须有可验证停止条件、证据回传、外部状态和人工把关点。</text>
+  </g>
 
-    <g>
-      <rect class="step-box" x="0" y="0" width="250" height="160" rx="26"/>
-      <circle cx="38" cy="42" r="22" fill="#176b87"/>
-      <text class="step-no" x="31" y="50">1</text>
-      <text class="step-title" x="74" y="50">Define</text>
-      <text class="step-copy" x="32" y="92">把问题转成清晰目标</text>
-      <text class="step-copy" x="32" y="121">明确输入、输出、边界</text>
+  <g transform="translate(90 285)">
+    <path class="loop-line" d="M700 60 C960 60 1175 215 1175 405 C1175 600 960 745 700 745 C440 745 225 600 225 405 C225 215 440 60 700 60"/>
+
+    <g transform="translate(500 300)">
+      <rect class="card" x="0" y="0" width="400" height="220" rx="26"/>
+      <text class="core-label" x="42" y="58">Recursive Goal</text>
+      <text class="copy" x="42" y="98">/goal：持续推进直到停止条件为真</text>
+      <text class="copy" x="42" y="130">输入：目标、边界、预算、证据要求</text>
+      <text class="copy" x="42" y="162">输出：变更、验证结果、下一轮状态</text>
+      <text class="small" x="42" y="198">人负责设计循环系统与治理边界</text>
     </g>
 
-    <g transform="translate(325 0)">
-      <rect class="step-box" x="0" y="0" width="250" height="160" rx="26"/>
-      <circle cx="38" cy="42" r="22" fill="#b56b22"/>
-      <text class="step-no" x="31" y="50">2</text>
-      <text class="step-title" x="74" y="50">Discover</text>
-      <text class="step-copy" x="32" y="92">收集源码、接口、原型</text>
-      <text class="step-copy" x="32" y="121">日志、拓扑和历史证据</text>
+    <g transform="translate(40 150)">
+      <rect class="component" x="0" y="0" width="330" height="150" rx="22"/>
+      <circle class="badge-blue" cx="38" cy="40" r="18"/>
+      <text class="badge-text" x="33" y="47">1</text>
+      <text class="label" x="78" y="47">Automations</text>
+      <text class="copy" x="34" y="90">定时、事件或 /loop 触发</text>
+      <text class="copy" x="34" y="120">发现任务、分派线程、续跑目标</text>
     </g>
 
-    <g transform="translate(650 0)">
-      <rect class="step-box" x="0" y="0" width="250" height="160" rx="26"/>
-      <circle cx="38" cy="42" r="22" fill="#53652d"/>
-      <text class="step-no" x="31" y="50">3</text>
-      <text class="step-title" x="74" y="50">Design</text>
-      <text class="step-copy" x="32" y="92">形成最小可行设计</text>
-      <text class="step-copy" x="32" y="121">说明数据流与风险</text>
+    <g transform="translate(500 40)">
+      <rect class="component" x="0" y="0" width="330" height="150" rx="22"/>
+      <circle class="badge-green" cx="38" cy="40" r="18"/>
+      <text class="badge-text" x="33" y="47">2</text>
+      <text class="label" x="78" y="47">Worktrees</text>
+      <text class="copy" x="34" y="90">Git worktree 隔离并行任务</text>
+      <text class="copy" x="34" y="120">为每个 Agent 提供独立 checkout</text>
     </g>
 
-    <g transform="translate(975 0)">
-      <rect class="step-box" x="0" y="0" width="250" height="160" rx="26"/>
-      <circle cx="38" cy="42" r="22" fill="#7b4e9b"/>
-      <text class="step-no" x="31" y="50">4</text>
-      <text class="step-title" x="74" y="50">Deliver</text>
-      <text class="step-copy" x="32" y="92">实现代码、配置迁移</text>
-      <text class="step-copy" x="32" y="121">补测试并处理运行问题</text>
+    <g transform="translate(960 150)">
+      <rect class="component" x="0" y="0" width="330" height="150" rx="22"/>
+      <circle class="badge-blue" cx="38" cy="40" r="18"/>
+      <text class="badge-text" x="33" y="47">3</text>
+      <text class="label" x="78" y="47">Skills</text>
+      <text class="copy" x="34" y="90">SKILL.md 固化项目知识</text>
+      <text class="copy" x="34" y="120">让每轮复用固定项目知识</text>
     </g>
 
-    <g transform="translate(530 210)">
-      <rect class="step-box" x="0" y="0" width="250" height="160" rx="26"/>
-      <circle cx="38" cy="42" r="22" fill="#176b87"/>
-      <text class="step-no" x="31" y="50">5</text>
-      <text class="step-title" x="74" y="50">Verify</text>
-      <text class="step-copy" x="32" y="92">用测试、E2E、截图</text>
-      <text class="step-copy" x="32" y="121">日志和验收关闭目标</text>
+    <g transform="translate(960 535)">
+      <rect class="component" x="0" y="0" width="350" height="155" rx="22"/>
+      <circle class="badge-green" cx="38" cy="40" r="18"/>
+      <text class="badge-text" x="33" y="47">4</text>
+      <text class="label" x="78" y="47">Plugins / Connectors</text>
+      <text class="copy" x="34" y="91">MCP、浏览器、SSH、Issue、CI</text>
+      <text class="copy" x="34" y="121">让循环触达真实工程环境</text>
     </g>
 
-    <g transform="translate(205 210)">
-      <rect class="step-box" x="0" y="0" width="250" height="160" rx="26"/>
-      <circle cx="38" cy="42" r="22" fill="#b56b22"/>
-      <text class="step-no" x="31" y="50">6</text>
-      <text class="step-title" x="74" y="50">Learn</text>
-      <text class="step-copy" x="32" y="92">把踩坑、约定、路径</text>
-      <text class="step-copy" x="32" y="121">写回知识库或交接文档</text>
+    <g transform="translate(525 675)">
+      <rect class="component" x="0" y="0" width="350" height="155" rx="22"/>
+      <circle class="badge-blue" cx="38" cy="40" r="18"/>
+      <text class="badge-text" x="33" y="47">5</text>
+      <text class="label" x="78" y="47">Sub-agents</text>
+      <text class="copy" x="34" y="91">Maker + Checker 分离</text>
+      <text class="copy" x="34" y="121">Checker 独立验证 Maker 结果</text>
+    </g>
+
+    <g transform="translate(40 535)">
+      <rect class="memory" x="0" y="0" width="350" height="155" rx="22"/>
+      <circle class="badge-green" cx="38" cy="40" r="18"/>
+      <text class="badge-text" x="33" y="47">6</text>
+      <text class="label" x="78" y="47">Memory / State</text>
+      <text class="copy" x="34" y="91">外部状态：md、看板、Linear</text>
+      <text class="copy" x="34" y="121">记录已做、待做、证据和坑</text>
+    </g>
+
+    <path class="evidence-line" d="M352 693 C304 760 304 816 355 858"/>
+    <path class="evidence-line" d="M1068 693 C1116 760 1116 816 1065 858"/>
+
+    <g transform="translate(1215 292)">
+      <rect class="gate" x="0" y="0" width="235" height="260" rx="22"/>
+      <text class="label" x="26" y="44">Human Gate</text>
+      <text class="copy" x="26" y="84">权限确认</text>
+      <text class="copy" x="26" y="116">生产风险</text>
+      <text class="copy" x="26" y="148">业务判断</text>
+      <text class="copy" x="26" y="180">代码审查</text>
+      <text class="small" x="26" y="220">作为治理约束，</text>
+      <text class="small" x="26" y="246">贯穿完整循环</text>
     </g>
   </g>
 
-  <text class="section" x="100" y="720">组成组件</text>
+  <g transform="translate(90 1160)">
+    <text class="section" x="0" y="0">CA 项目映射</text>
 
-  <g transform="translate(100 760)">
-    <path class="small-line" d="M 360 56 H 400"/>
-    <path class="small-line" d="M 760 56 H 800"/>
-    <path class="small-line" d="M 980 112 V 150"/>
-    <path class="small-line" d="M 400 214 H 360"/>
-    <path class="small-line" d="M 800 214 H 760"/>
-
-    <g>
-      <rect class="component" x="0" y="0" width="360" height="112" rx="22"/>
-      <text class="component-title" x="24" y="40">Goal Tracker</text>
-      <text class="component-copy" x="24" y="72">记录目标、预算</text>
-      <text class="component-copy" x="24" y="96">进展和阻塞</text>
+    <g transform="translate(0 38)">
+      <rect class="map" x="0" y="0" width="330" height="98" rx="18"/>
+      <text class="map-label" x="24" y="38">Executor</text>
+      <text class="copy" x="24" y="68">源码修改、SSH 部署、配置调整</text>
     </g>
 
-    <g transform="translate(400 0)">
-      <rect class="component" x="0" y="0" width="360" height="112" rx="22"/>
-      <text class="component-title" x="24" y="40">Context Builder</text>
-      <text class="component-copy" x="24" y="72">构建可验证</text>
-      <text class="component-copy" x="24" y="96">项目上下文</text>
+    <g transform="translate(365 38)">
+      <rect class="map" x="0" y="0" width="330" height="98" rx="18"/>
+      <text class="map-label" x="24" y="38">Verifier</text>
+      <text class="copy" x="24" y="68">测试、浏览器 E2E、日志、截图</text>
     </g>
 
-    <g transform="translate(800 0)">
-      <rect class="component" x="0" y="0" width="360" height="112" rx="22"/>
-      <text class="component-title" x="24" y="40">Executor</text>
-      <text class="component-copy" x="24" y="72">编码、命令执行</text>
-      <text class="component-copy" x="24" y="96">远程操作与联调</text>
+    <g transform="translate(730 38)">
+      <rect class="map" x="0" y="0" width="330" height="98" rx="18"/>
+      <text class="map-label" x="24" y="38">Memory Keeper</text>
+      <text class="copy" x="24" y="68">仓库内 md 业务记忆与交接文档</text>
     </g>
 
-    <g transform="translate(800 158)">
-      <rect class="component" x="0" y="0" width="360" height="112" rx="22"/>
-      <text class="component-title" x="24" y="40">Verifier</text>
-      <text class="component-copy" x="24" y="72">测试、E2E</text>
-      <text class="component-copy" x="24" y="96">截图和日志检查</text>
-    </g>
-
-    <g transform="translate(400 158)">
-      <rect class="component" x="0" y="0" width="360" height="112" rx="22"/>
-      <text class="component-title" x="24" y="40">Memory Keeper</text>
-      <text class="component-copy" x="24" y="72">维护经验库</text>
-      <text class="component-copy" x="24" y="96">和下一轮入口</text>
-    </g>
-
-    <g transform="translate(0 158)">
-      <rect class="component" x="0" y="0" width="360" height="112" rx="22"/>
-      <text class="component-title" x="24" y="40">Human Gate</text>
-      <text class="component-copy" x="24" y="72">处理权限、风险</text>
-      <text class="component-copy" x="24" y="96">和业务判断</text>
+    <g transform="translate(1095 38)">
+      <rect class="map" x="0" y="0" width="330" height="98" rx="18"/>
+      <text class="map-label" x="24" y="38">Orchestrator</text>
+      <text class="copy" x="24" y="68">/goal 编排循环、预算、停止条件</text>
     </g>
   </g>
 </svg>
