@@ -110,6 +110,18 @@
       background: #fff;
     }
 
+    .nav-links .github-link {
+      color: var(--deep);
+      border: 1px solid rgba(15, 47, 61, 0.16);
+      background: rgba(255, 255, 255, 0.7);
+      font-weight: 800;
+    }
+
+    .nav-links .github-link:hover {
+      border-color: rgba(15, 47, 61, 0.28);
+      box-shadow: 0 6px 16px rgba(23, 32, 42, 0.08);
+    }
+
     .hero {
       width: min(1180px, calc(100% - 40px));
       margin: 0 auto;
@@ -709,26 +721,51 @@
     }
 
     .footer {
-      padding: 44px 0 60px;
+      padding: 48px 0 58px;
       background: var(--deep);
       color: #dce6eb;
     }
 
     .footer .container {
-      display: flex;
-      justify-content: space-between;
-      gap: 24px;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(180px, 0.6fr) minmax(220px, 0.75fr);
+      gap: 34px;
+      align-items: start;
     }
 
     .footer strong {
+      display: block;
       color: #fff;
+      font-size: 18px;
+      margin-bottom: 10px;
     }
 
     .footer p {
       max-width: 680px;
       margin: 0;
       color: #c1d0d7;
+    }
+
+    .footer-links {
+      display: grid;
+      gap: 8px;
+    }
+
+    .footer-links a {
+      color: #eaf3f7;
+      font-weight: 700;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .footer-meta {
+      display: grid;
+      gap: 8px;
+      color: #c1d0d7;
+      font-size: 14px;
     }
 
     @media (max-width: 980px) {
@@ -749,6 +786,7 @@
       .grid-3,
       .flow,
       .metric-row,
+      .footer .container,
       .risk-list {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -783,6 +821,7 @@
       .grid-3,
       .flow,
       .metric-row,
+      .footer .container,
       .evidence-strip,
       .risk-list {
         grid-template-columns: 1fr;
@@ -837,6 +876,7 @@
           <a href="#ca-project">CA 项目实践</a>
           <a href="#risks">风险控制</a>
           <a href="#future">未来计划</a>
+          <a class="github-link" href="https://github.com/Makia9879" target="_blank" rel="noopener noreferrer" aria-label="打开 Makia9879 的 GitHub 主页">GitHub</a>
         </nav>
       </div>
     </header>
@@ -1168,10 +1208,26 @@
 
     <footer class="footer">
       <div class="container">
-        <strong>Loop Engineering = 目标驱动 + 证据闭环 + 经验沉淀</strong>
-        <p>
-          对 CA 项目而言，它的核心价值在于把需求分析、实现、部署、验证和知识维护串成可复用的 AI 工程循环。
-        </p>
+        <section aria-label="页面说明">
+          <strong>About</strong>
+          <p>
+            Loop Engineering 把目标、执行、验证和记忆组织成可重复的工程循环，并让 CA 项目的需求分析、实现、部署、验证和知识维护形成连续交付路径。
+          </p>
+        </section>
+        <section aria-label="相关链接">
+          <strong>Links</strong>
+          <div class="footer-links">
+            <a href="https://github.com/Makia9879" target="_blank" rel="noopener noreferrer">GitHub · Makia9879</a>
+            <a href="#top">返回顶部</a>
+          </div>
+        </section>
+        <section aria-label="版本信息">
+          <strong>Version</strong>
+          <div class="footer-meta">
+            <span>2026.06 · Loop Engineering practice note</span>
+            <span>面向 CA 项目的 AI 工程循环介绍</span>
+          </div>
+        </section>
       </div>
     </footer>
   </div>
